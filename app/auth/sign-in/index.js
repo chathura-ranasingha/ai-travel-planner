@@ -1,24 +1,72 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
+import { auth } from "../../../configs/FirebaseConfig";
 import { Colors } from "../../../constants/Colors";
 
 export default function SignIn() {
   const navigation = useNavigation();
   const router = useRouter();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
+  const onSignIn = () => {
+    if (!email || !password) {
+      ToastAndroid.show("Please fill all the fields", ToastAndroid.LONG);
+      return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        // navigate or update UI here if needed
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+
+        switch (errorCode) {
+          case "auth/invalid-email":
+            ToastAndroid.show("Invalid email address", ToastAndroid.LONG);
+            break;
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+          case "auth/invalid-credential":
+            ToastAndroid.show("Invalid credentials", ToastAndroid.LONG);
+            break;
+          case "auth/too-many-requests":
+            ToastAndroid.show(
+              "Too many attempts. Try again later.",
+              ToastAndroid.LONG
+            );
+            break;
+          default:
+            ToastAndroid.show(
+              errorMessage || "Sign-in failed",
+              ToastAndroid.LONG
+            );
+        }
+      });
+  };
 
   return (
     <View
@@ -75,7 +123,11 @@ export default function SignIn() {
         >
           Email
         </Text>
-        <TextInput style={styles.input} placeholder="Enter Email" />
+        <TextInput
+          style={styles.input}
+          onChangeText={(Value) => setEmail(Value)}
+          placeholder="Enter Email"
+        />
       </View>
       {/* [password] */}
       <View
@@ -94,10 +146,12 @@ export default function SignIn() {
           secureTextEntry={true}
           style={styles.input}
           placeholder="Enter Password"
+          onChangeText={(Value) => setPassword(Value)}
         />
       </View>
       {/* sign in button */}
-      <View
+      <TouchableOpacity
+        onPress={onSignIn}
         style={{
           padding: 20,
           backgroundColor: Colors.PRIMARY,
@@ -113,7 +167,7 @@ export default function SignIn() {
         >
           Sign In
         </Text>
-      </View>
+      </TouchableOpacity>
       {/* create account button */}
       <TouchableOpacity
         onPress={() => router.replace("/auth/sign-up")}
