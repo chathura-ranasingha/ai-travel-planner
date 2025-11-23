@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useContext, useEffect } from "react";
 import { View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -8,6 +8,7 @@ import { CreateTripContext } from "../../contex/CreateTripContext";
 const SearchPlace = () => {
   const navigation = useNavigation();
   const { tripData, setTripData } = useContext(CreateTripContext);
+  const router = useRouter();
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,6 +45,8 @@ const SearchPlace = () => {
               Url: details?.url,
             },
           });
+
+          router.push("/create-trip/select-traveler");
         }}
         query={{
           key: process.env.EXPO_PUBLIC_GOOGLE_MAP_KEY,

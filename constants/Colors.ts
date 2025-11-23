@@ -12,6 +12,7 @@ export const Colors = {
   WHITE: "#FFFFFF",
   PRIMARY: "#000000",
   GRAY: "#7D7D7D",
+  LIGHT_GRAY: "#F2F2F2",
   light: {
     text: "#11181C",
     background: "#fff",
