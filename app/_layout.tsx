@@ -8,5 +8,10 @@ export default function RootLayout() {
     "outfit-bold": require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  // return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+    </Stack>
+  );
 }
