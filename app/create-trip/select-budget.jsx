@@ -1,13 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import OptionCard from "../../components/CreateTrip/OptionCard";
 import { Colors } from "../../constants/Colors";
-import { SelectTravelesrOptions } from "../../constants/Options";
+import { SelectBudgetOptions } from "../../constants/Options";
 import { CreateTripContext } from "../../contex/CreateTripContext";
 
-export default function selectTraveler() {
+export default function SelectBudget() {
   const navigation = useNavigation();
   const [selectedOption, setSelectedOption] = useState();
   const { tripData, setTripData } = useContext(CreateTripContext);
@@ -21,22 +27,29 @@ export default function selectTraveler() {
   }, []);
 
   useEffect(() => {
-    setTripData({
-      ...tripData,
-      traveler: selectedOption,
-    });
+    selectedOption &&
+      setTripData({
+        ...tripData,
+        budget: selectedOption?.title,
+      });
   }, [selectedOption]);
 
-  useEffect(() => {
-    console.log(tripData);
-  }, [tripData]);
+  const onClickContinue = () => {
+    if (selectedOption) {
+      navigation.navigate("SelectDates");
+    } else {
+      ToastAndroid.show("Please select a budget", ToastAndroid.LONG);
+      return;
+    }
+    router.push("");
+  };
 
   return (
     <View
       style={{
         padding: 25,
         paddingTop: 75,
-        backgroundColor: Colors.WHITE,
+        backgroundColor: "white",
         height: "100%",
       }}
     >
@@ -47,7 +60,7 @@ export default function selectTraveler() {
           marginTop: 20,
         }}
       >
-        Who's traveling
+        Budget
       </Text>
 
       <View
@@ -57,21 +70,20 @@ export default function selectTraveler() {
       >
         <Text
           style={{
-            fontSize: 23,
+            fontSize: 18,
             fontFamily: "outfit-bold",
+            marginTop: 20,
           }}
         >
-          Choose your travelers
+          Choose spending habits for your trip
         </Text>
 
         <FlatList
-          data={SelectTravelesrOptions}
+          data={SelectBudgetOptions}
           renderItem={({ item, index }) => (
             <TouchableOpacity
+              style={{ marginVertical: 10 }}
               onPress={() => setSelectedOption(item)}
-              style={{
-                marginVertical: 10,
-              }}
             >
               <OptionCard option={item} selectedOption={selectedOption} />
             </TouchableOpacity>
@@ -80,6 +92,7 @@ export default function selectTraveler() {
       </View>
 
       <TouchableOpacity
+        onPress={() => onClickContinue()}
         style={{
           padding: 15,
           backgroundColor: Colors.PRIMARY,
@@ -87,18 +100,16 @@ export default function selectTraveler() {
           marginTop: 20,
         }}
       >
-        <Link href="/create-trip/select-dates" style={{ width: "100%" }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "outfit-medium",
-              color: Colors.WHITE,
-              textAlign: "center",
-            }}
-          >
-            Continue
-          </Text>
-        </Link>
+        <Text
+          style={{
+            fontSize: 20,
+            fontFamily: "outfit-medium",
+            color: Colors.WHITE,
+            textAlign: "center",
+          }}
+        >
+          Continue
+        </Text>
       </TouchableOpacity>
     </View>
   );

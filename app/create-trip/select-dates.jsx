@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { router } from "expo-router";
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
 import { Text, ToastAndroid, TouchableOpacity, View } from "react-native";
@@ -37,7 +38,7 @@ export default function SelectDates() {
       endDate: endDate.format("YYYY-MM-DD"),
       totalNoOfDays: totalNoOfDays + 1,
     });
-    navigation.navigate("SelectTraveler");
+    router.push("/create-trip/select-budget");
   };
 
   useEffect(() => {
