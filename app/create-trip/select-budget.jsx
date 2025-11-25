@@ -35,13 +35,12 @@ export default function SelectBudget() {
   }, [selectedOption]);
 
   const onClickContinue = () => {
-    if (selectedOption) {
-      navigation.navigate("SelectDates");
-    } else {
+    if (!selectedOption) {
       ToastAndroid.show("Please select a budget", ToastAndroid.LONG);
       return;
     }
-    router.push("");
+
+    router.push("/create-trip/review-trip");
   };
 
   return (
