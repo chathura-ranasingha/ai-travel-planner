@@ -154,10 +154,7 @@ export default function TripDetails() {
         />
         {/* hotel list */}
         <HotelList
-          hotelData={
-            tripDetails?.tripPlan?.travel_plan?.hotel_options ||
-            tripDetails?.tripPlan?.travel_plan?.hotelsOptions
-          }
+          hotelData={tripDetails?.tripPlan?.travel_plan?.hotel_options}
         />
         {/* trip day planner */}
       </View>
