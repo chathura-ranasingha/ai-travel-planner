@@ -61,7 +61,7 @@ export default function UserTripCard({ trip }) {
             color: Colors.GRAY,
           }}
         >
-          Traveling : {formatData(trip.tripData).traveler.title}
+          Traveling : {formatData(trip.tripData)?.traveler?.title || ""}
         </Text>
       </View>
     </View>
