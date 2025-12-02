@@ -47,6 +47,7 @@ export default function GenerateTrip() {
     });
 
     router.push("(tabs)/mytrip");
+    //router.push("/auth/sign-in");
   };
 
   return (

@@ -1,19 +1,45 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
-import { Text, View } from "react-native";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import StartNewTripCard from "../../components/MyTrips/StartNewTripCard";
+import UserTripList from "../../components/MyTrips/UserTripList";
+import { auth, db } from "../../configs/FirebaseConfig";
 import { Colors } from "../../constants/Colors";
 
 export default function MyTrip() {
   const [useTrips, setUseTrips] = useState([]);
+  const user = auth.currentUser;
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    user && GetMyTrips();
+  }, [user]);
+
+  const GetMyTrips = async () => {
+    setLoading(true);
+    setUseTrips([]);
+    const q = query(
+      collection(db, "UserTrips"),
+      where("userEmail", "==", user.email)
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      setUseTrips((prev) => [...prev, doc.data()]);
+    });
+    setLoading(false);
+  };
 
   return (
-    <View
-      style={{
+    <ScrollView
+      contentContainerStyle={{
         padding: 25,
         paddingTop: 55,
         backgroundColor: Colors.WHITE,
-        height: "100%",
+        flexGrow: 1,
       }}
     >
       <View
@@ -35,7 +61,13 @@ export default function MyTrip() {
         <Ionicons name="add-circle" size={50} color="black" />
       </View>
 
-      {useTrips.length === 0 ? <StartNewTripCard /> : null}
-    </View>
+      {loading && <ActivityIndicator size={"large"} color={Colors.PRIMARY} />}
+
+      {useTrips.length === 0 ? (
+        <StartNewTripCard />
+      ) : (
+        <UserTripList useTrips={useTrips} />
+      )}
+    </ScrollView>
   );
 }
