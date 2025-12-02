@@ -152,7 +152,7 @@ export default function TripDetails() {
         <FlighInfo
           flightData={
             tripDetails?.tripPlan?.travel_plan?.flight_details ||
-            tripDetails?.tripPlan?.travel_plan?.flightdetails
+            tripDetails?.tripPlan?.travel_plan?.flightDZetails
           }
         />
         {/* hotel list */}
