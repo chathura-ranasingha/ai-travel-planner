@@ -46,8 +46,8 @@ export default function GenerateTrip() {
       docId: docId,
     });
 
-    router.push("(tabs)/mytrip");
-    //router.push("/auth/sign-in");
+    //router.push("(tabs)/mytrip");
+    router.push("/auth/sign-in");
   };
 
   return (
