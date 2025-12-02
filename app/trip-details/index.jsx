@@ -150,14 +150,14 @@ export default function TripDetails() {
         </Text>
         {/* flight info */}
         <FlighInfo
-          flightData={
-            tripDetails?.tripPlan?.travel_plan?.flight_details ||
-            tripDetails?.tripPlan?.travel_plan?.flightDZetails
-          }
+          flightData={tripDetails?.tripPlan?.travel_plan?.flight_details}
         />
         {/* hotel list */}
         <HotelList
-          hotelData={tripDetails?.tripPlan?.travel_plan?.hotel_options}
+          hotelData={
+            tripDetails?.tripPlan?.travel_plan?.hotel_options ||
+            tripDetails?.tripPlan?.travel_plan?.hotelsOptions
+          }
         />
         {/* trip day planner */}
       </View>
